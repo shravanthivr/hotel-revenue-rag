@@ -1,0 +1,7 @@
+## Campaign recommendation prompt
+
+Use this template to craft prompts for campaign recommendation generation.
+
+{context}
+
+Recommend campaign actions based on the provided context.

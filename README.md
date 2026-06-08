@@ -7,45 +7,66 @@ Demo: Graph RAG for Organizational Knowledge - Langchain/Graph
 
 This project demonstrates a Retrieval-Augmented Generation (RAG) application for hotel revenue optimization. The system analyzes hotel occupancy forecasts, local events, guest personas, historical campaign performance, and marketing playbooks to recommend targeted promotional campaigns that can help increase hotel occupancy.
 
-The project is built using LangChain, OpenAI Embeddings, and Pinecone Vector Database.
+The application uses LangChain, Pinecone Vector Database, and Nebius Token Factory models for embeddings and/or generation.
 
 ---
 
 ## Business Problem
 
-Hotels frequently experience periods of low occupancy and must decide which marketing campaigns to launch to increase bookings.
+Hotels frequently experience periods of low occupancy and must determine which marketing campaigns to launch to increase bookings.
 
-Traditionally, revenue managers manually analyze:
+Revenue managers typically analyze:
 
 * Occupancy forecasts
-* Local events
-* Guest segments
+* Local events and conferences
+* Guest segments and preferences
 * Historical campaign performance
 * Marketing best practices
 
-This project uses RAG to retrieve relevant business knowledge and generate campaign recommendations grounded in historical data and marketing playbooks.
+This project uses RAG to retrieve relevant business knowledge and generate evidence-based campaign recommendations.
+
+---
+
+## Learning Objectives
+
+This project demonstrates:
+
+* Document ingestion
+* Text chunking
+* Embedding generation
+* Vector database storage
+* Semantic retrieval
+* Retrieval-Augmented Generation (RAG)
+* Business-focused AI recommendations
+* Nebius Token Factory integration
 
 ---
 
 ## Architecture
 
 ```text
-Business Query
+Synthetic Business Data
       │
       ▼
-Retriever (Pinecone)
+Document Ingestion
       │
       ▼
-Relevant Campaigns
-Relevant Events
-Guest Personas
-Marketing Playbooks
+Chunking
       │
       ▼
-Prompt Augmentation
+Nebius Embeddings
       │
       ▼
-OpenAI LLM
+Pinecone Vector Database
+      │
+      ▼
+Retriever
+      │
+      ▼
+Context Augmentation
+      │
+      ▼
+Nebius LLM
       │
       ▼
 Campaign Recommendation
@@ -55,24 +76,64 @@ Campaign Recommendation
 
 ## Data Sources
 
-The knowledge base contains synthetic hotel marketing data:
+The knowledge base consists of synthetic hotel marketing data:
 
-* `campaigns.json` – Historical marketing campaigns
-* `events.json` – Local events and conferences
-* `personas.json` – Guest personas and preferences
-* `playbooks.json` – Marketing best practices
-* `occupancy_forecast.json` – Hotel occupancy forecasts
+### Campaign History
+
+Historical promotional campaigns and occupancy lift metrics.
+
+### Local Events
+
+Conferences, concerts, festivals, and sporting events.
+
+### Guest Personas
+
+Traveler segments, preferences, and booking behaviors.
+
+### Marketing Playbooks
+
+Best practices and campaign strategies.
+
+### Occupancy Forecasts
+
+Projected occupancy levels used as input for recommendations.
 
 ---
 
 ## Technology Stack
 
-* Python 3.9+
+### AI & RAG
+
 * LangChain
-* OpenAI Embeddings
 * Pinecone Vector Database
-* dotenv
+* Nebius Token Factory Models
+* OpenAI-compatible API integration (via Nebius)
+
+### Development
+
+* Python 3.9+
 * VS Code
+* Git
+
+---
+
+## Retrieval Workflow
+
+### Ingestion
+
+1. Load JSON business documents
+2. Convert to LangChain Documents
+3. Chunk text
+4. Generate embeddings using Nebius models
+5. Store vectors in Pinecone
+
+### Query
+
+1. User submits occupancy scenario
+2. Retrieve relevant documents from Pinecone
+3. Augment prompt with retrieved context
+4. Generate campaign recommendation using Nebius LLM
+5. Return recommendation with supporting evidence
 
 ---
 
@@ -107,44 +168,14 @@ hotel-revenue-rag/
 
 ---
 
-## Setup
-
-### Create Virtual Environment
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Configure Environment Variables
+## Environment Variables
 
 Create a `.env` file:
 
 ```env
-OPENAI_API_KEY=your_openai_api_key
+NEBIUS_API_KEY=your_nebius_api_key
+NEBIUS_BASE_URL=your_nebius_endpoint
 PINECONE_API_KEY=your_pinecone_api_key
-```
-
----
-
-## Running the Project
-
-### Load Data into Pinecone
-
-```bash
-python ingestion/load_to_pinecone.py
-```
-
-### Run the Application
-
-```bash
-python app.py
 ```
 
 ---
@@ -158,6 +189,7 @@ Forecast Occupancy: 62%
 
 Location: Northern Virginia
 
+Question:
 What marketing campaign should we launch next weekend to improve occupancy?
 ```
 
@@ -180,31 +212,24 @@ Offer:
 Expected Occupancy Lift:
 10-15%
 
-Reasoning:
-Similar campaigns performed well during large technology conferences and generated measurable occupancy improvements.
+Supporting Evidence:
+Retrieved from conference marketing playbooks,
+historical campaign data, and business traveler personas.
 ```
+
+---
+
+## Cohort Requirement
+
+This project satisfies the Week 2 requirement by using Nebius Token Factory for at least one model call (embedding generation and/or response generation) while implementing a complete Retrieval-Augmented Generation workflow.
 
 ---
 
 ## Future Enhancements
 
-* Hybrid RAG (Vector + Knowledge Graph)
-* Neo4j Integration
+* Hybrid RAG (Graph + Vector)
+* Neo4j Knowledge Graph
 * LangGraph Agent Workflows
 * LangSmith Evaluation
-* Real-Time Event Data Ingestion
-* Campaign Performance Analytics Dashboard
-
----
-
-## Learning Objectives
-
-This project demonstrates:
-
-* Document ingestion
-* Text chunking
-* Embeddings generation
-* Vector storage
-* Semantic retrieval
-* Retrieval-Augmented Generation (RAG)
-* Business-focused AI applications
+* Real-Time Event Ingestion
+* Revenue Optimization Dashboard

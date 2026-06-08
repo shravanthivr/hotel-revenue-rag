@@ -216,13 +216,6 @@ Supporting Evidence:
 Retrieved from conference marketing playbooks,
 historical campaign data, and business traveler personas.
 ```
-
----
-
-## Cohort Requirement
-
-This project satisfies the Week 2 requirement by using Nebius Token Factory for at least one model call (embedding generation and/or response generation) while implementing a complete Retrieval-Augmented Generation workflow.
-
 ---
 
 ## Future Enhancements

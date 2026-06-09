@@ -1,3 +1,6 @@
+<img width="3420" height="1776" alt="HotelPage1-RAG" src="https://github.com/user-attachments/assets/ba13b6b8-e5f9-467f-b690-7022215292fd" />
+<img width="3420" height="1776" alt="HotelPage2-RAG" src="https://github.com/user-attachments/assets/3154da5c-7abd-4e72-a90c-5fb3fa78ed59" />
+
 # hotel-revenue-rag
 Demo: Graph RAG for Organizational Knowledge - Langchain/Graph
 

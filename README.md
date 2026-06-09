@@ -7,7 +7,7 @@ Demo: Graph RAG for Organizational Knowledge - Langchain/Graph
 
 This project demonstrates a Retrieval-Augmented Generation (RAG) application for hotel revenue optimization. The system analyzes hotel occupancy forecasts, local events, guest personas, historical campaign performance, and marketing playbooks to recommend targeted promotional campaigns that can help increase hotel occupancy.
 
-The application uses LangChain, Pinecone Vector Database, and Nebius Token Factory models for embeddings and/or generation.
+The application uses Pinecone Vector Database, a local dimension-matched embedding model, hybrid retrieval, reranking, and Nebius Token Factory for grounded answer generation.
 
 ---
 
@@ -35,7 +35,8 @@ This project demonstrates:
 * Text chunking
 * Embedding generation
 * Vector database storage
-* Semantic retrieval
+* Hybrid dense and BM25 retrieval
+* Cross-encoder reranking
 * Retrieval-Augmented Generation (RAG)
 * Business-focused AI recommendations
 * Nebius Token Factory integration
@@ -51,16 +52,16 @@ Synthetic Business Data
 Document Ingestion
       │
       ▼
-Chunking
+Semantic record-level chunking
       │
       ▼
-Nebius Embeddings
+Local BGE-small embeddings
       │
       ▼
 Pinecone Vector Database
       │
       ▼
-Retriever
+Hybrid Retriever + Reranker
       │
       ▼
 Context Augmentation
@@ -104,10 +105,12 @@ Projected occupancy levels used as input for recommendations.
 
 ### AI & RAG
 
-* LangChain
 * Pinecone Vector Database
-* Nebius Token Factory Models
+* SentenceTransformers embeddings and reranker
+* BM25 keyword retrieval
+* Nebius Token Factory generation model
 * OpenAI-compatible API integration (via Nebius)
+* Streamlit UI
 
 ### Development
 
@@ -123,17 +126,20 @@ Projected occupancy levels used as input for recommendations.
 
 1. Load JSON business documents
 2. Convert to LangChain Documents
-3. Chunk text
-4. Generate embeddings using Nebius models
+3. Build semantic record-level chunks
+4. Generate local BGE-small embeddings
 5. Store vectors in Pinecone
 
 ### Query
 
 1. User submits occupancy scenario
 2. Retrieve relevant documents from Pinecone
-3. Augment prompt with retrieved context
-4. Generate campaign recommendation using Nebius LLM
-5. Return recommendation with supporting evidence
+3. Retrieve dense candidates from Pinecone
+4. Retrieve sparse candidates with BM25
+5. Merge results with reciprocal rank fusion
+6. Rerank top candidates with a cross-encoder
+7. Generate campaign recommendation using Nebius LLM
+8. Return recommendation with supporting evidence
 
 ---
 
@@ -143,16 +149,11 @@ Projected occupancy levels used as input for recommendations.
 hotel-revenue-rag/
 │
 ├── data/
-│   ├── campaigns.json
-│   ├── events.json
-│   ├── personas.json
-│   ├── playbooks.json
-│   └── occupancy_forecast.json
+│   └── rag_data.json
 │
 ├── ingestion/
-│   ├── load_documents.py
-│   ├── chunk_documents.py
-│   └── load_to_pinecone.py
+│   ├── loader.py
+│   └── query.py
 │
 ├── retrievers/
 │   └── retriever.py
@@ -160,9 +161,12 @@ hotel-revenue-rag/
 ├── chains/
 │   └── rag_chain.py
 │
+├── prompts/
+│   └── campaigns_prompt.txt
+├── reports/
+│   └── chunking_retrieval_report.md
 ├── app.py
 ├── requirements.txt
-├── .env.example
 └── README.md
 ```
 
@@ -174,8 +178,10 @@ Create a `.env` file:
 
 ```env
 NEBIUS_API_KEY=your_nebius_api_key
-NEBIUS_BASE_URL=your_nebius_endpoint
+NEBIUS_BASE_URL=https://api.studio.nebius.com/v1/
+NEBIUS_GEN_MODEL=meta-llama/Llama-3.3-70B-Instruct
 PINECONE_API_KEY=your_pinecone_api_key
+PINECONE_INDEX=hospitality-rag
 ```
 
 ---
@@ -217,6 +223,26 @@ Retrieved from conference marketing playbooks,
 historical campaign data, and business traveler personas.
 ```
 ---
+
+## Run
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Load the Pinecone index:
+
+```bash
+python -m ingestion.loader
+```
+
+Start the UI:
+
+```bash
+streamlit run app.py
+```
 
 ## Future Enhancements
 

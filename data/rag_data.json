@@ -1,0 +1,173 @@
+{
+  "campaign_history": [
+    {
+      "campaign_name": "Summer Family Package",
+      "hotel_type": "Resort",
+      "occupancy_lift": 12,
+      "offer": "Kids stay free",
+      "metadata": {
+        "source_type": "campaign_history",
+        "date_range": "2025-06-01 to 2025-08-31",
+        "target_price_band_usd": "180-260",
+        "discount_pct": 10,
+        "minimum_stay_nights": 3
+      }
+    },
+    {
+      "campaign_name": "Weekend Escape Deal",
+      "hotel_type": "Boutique",
+      "occupancy_lift": 9,
+      "offer": "20% off two-night stays",
+      "metadata": {
+        "source_type": "campaign_history",
+        "date_range": "2025-04-01 to 2025-05-31",
+        "target_price_band_usd": "160-230",
+        "discount_pct": 20,
+        "minimum_stay_nights": 2
+      }
+    },
+    {
+      "campaign_name": "Business Traveler Bundle",
+      "hotel_type": "Urban Hotel",
+      "occupancy_lift": 15,
+      "offer": "Complimentary breakfast and late checkout",
+      "metadata": {
+        "source_type": "campaign_history",
+        "date_range": "2025-09-01 to 2025-11-15",
+        "target_price_band_usd": "210-310",
+        "discount_pct": 0,
+        "minimum_stay_nights": 1
+      }
+    },
+    {
+      "campaign_name": "Romantic Getaway Package",
+      "hotel_type": "Luxury Resort",
+      "occupancy_lift": 11,
+      "offer": "Dinner for two and spa credit",
+      "metadata": {
+        "source_type": "campaign_history",
+        "date_range": "2025-02-01 to 2025-03-15",
+        "target_price_band_usd": "320-480",
+        "discount_pct": 5,
+        "minimum_stay_nights": 2
+      }
+    },
+    {
+      "campaign_name": "Winter Ski & Stay",
+      "hotel_type": "Mountain Lodge",
+      "occupancy_lift": 18,
+      "offer": "Free ski pass with 3-night minimum",
+      "metadata": {
+        "source_type": "campaign_history",
+        "date_range": "2025-12-01 to 2026-02-28",
+        "target_price_band_usd": "240-380",
+        "discount_pct": 8,
+        "minimum_stay_nights": 3
+      }
+    }
+  ],
+
+  "events": [
+    {"event_id": "EV001", "event_name": "Tech Conference", "attendance": 15000, "city": "Washington DC", "event_start": "2026-07-17",
+    "event_end": "2026-07-19" , "distance_from_hotel_miles": 2.5, "metadata": { "source_type": "event", "date_range": "2026-07-17 to 2026-07-19", "expected_price_pressure": "high" }},
+    { "event_id": "EV002","event_name": "Healthcare Innovation Summit", "attendance": 8200, "city": "Boston", "event_start": "2026-06-17",
+    "event_end": "2026-06-18", "distance_from_hotel_miles": 5.5, "metadata": { "source_type": "event", "date_range": "2026-06-17 to 2026-06-18", "expected_price_pressure": "medium" }},
+    { "event_id": "EV003","event_name": "National Sales Expo", "attendance": 22000, "city": "Chicago","event_start": "2026-08-07",
+    "event_end": "2026-08-10" , "distance_from_hotel_miles": 0.5, "metadata": { "source_type": "event", "date_range": "2026-08-07 to 2026-08-10", "expected_price_pressure": "high" }},
+    { "event_id": "EV004","event_name": "Fintech Forum", "attendance": 6500, "city": "New York", "event_start": "2026-07-17",
+    "event_end": "2026-07-19" , "distance_from_hotel_miles": 8.5, "metadata": { "source_type": "event", "date_range": "2026-07-17 to 2026-07-19", "expected_price_pressure": "medium" }},
+    { "event_id": "EV005","event_name": "Retail Leadership Congress", "attendance": 11000, "city": "Atlanta", "event_start": "2026-06-27",
+    "event_end": "2026-06-28", "distance_from_hotel_miles": 10, "metadata": { "source_type": "event", "date_range": "2026-06-27 to 2026-06-28", "expected_price_pressure": "medium" } }
+  ],
+
+  "guest_personas": [
+    { "segment": "Business Travelers", "preferences": ["late checkout", "wifi", "breakfast"] },
+    { "segment": "Luxury Leisure Seekers", "preferences": ["spa access", "fine dining", "concierge service"] },
+    { "segment": "Budget Backpackers", "preferences": ["cheap parking", "shared lounges", "flexible cancellation"] },
+    { "segment": "Family Vacationers", "preferences": ["adjoining rooms", "kids club", "pool access"] },
+    { "segment": "Remote Workers", "preferences": ["dedicated desk", "high-speed wifi", "quiet zones"] },
+    { "segment": "Honeymooners", "preferences": ["private balcony", "turndown service", "champagne on arrival"] },
+    { "segment": "Sports Team Travelers", "preferences": ["group block booking", "laundry service", "early breakfast"] },
+    { "segment": "Senior Leisure Guests", "preferences": ["ground floor access", "accessible bathrooms", "slow-paced tours"] },
+    { "segment": "Conference Attendees", "preferences": ["shuttle service", "flexible checkout", "networking lounge"] },
+    { "segment": "Eco-Conscious Travelers", "preferences": ["green certifications", "plant-based dining", "bike rentals"] }
+  ],
+
+  "playbook": [
+    { "segment": "Conference Attendees", "insight": "Conference attendees respond well to bundle offers that include transportation and flexible checkout.", "recommended_actions": ["offer shuttle package", "extend checkout to 2PM", "include breakfast"] },
+    { "segment": "Business Travelers", "insight": "Business travelers prioritize speed and predictability over perks. Loyalty points and express check-in drive repeat bookings.", "recommended_actions": ["enroll in loyalty program", "guarantee room type", "offer express check-in"] },
+    { "segment": "Luxury Leisure Seekers", "insight": "Luxury guests expect proactive personalization. Pre-arrival outreach with curated itineraries significantly increases ancillary spend.", "recommended_actions": ["send pre-arrival itinerary", "offer spa pre-booking", "assign dedicated butler"] },
+    { "segment": "Family Vacationers", "insight": "Families book further in advance and respond to all-inclusive pricing. Transparent costs remove the biggest friction point.", "recommended_actions": ["offer all-inclusive tier", "highlight kids club hours", "provide dedicated family concierge"] },
+    { "segment": "Remote Workers", "insight": "Work-from-hotel guests stay longer when guaranteed workspace quality. A 'test the desk' photo package in emails converts at 3x the rate.", "recommended_actions": ["send workspace photo package", "offer weekly rate discount", "guarantee dedicated desk"] }
+  ],
+
+  
+ "hotels": [
+    {
+      "hotel_id": "HOT001",
+      "hotel_name": "Marriott Tysons Corner",
+      "city": "McLean",
+      "metro_area": "Washington DC",
+      "hotel_type": "Urban Hotel",
+      "total_rooms": 80,
+      "current_occupancy_pct": 62,
+      "occupied_rooms": 50,
+      "available_rooms": 30,
+      "forecast_period": "next weekend",
+      "primary_guest_segment": "Business Travelers",
+      "nearby_events": ["Tech Conference"],
+       "metadata": {
+      "source_type": "hotel",
+      "region": "Northern Virginia",
+      "date_range": "2026-07-17 to 2026-07-19",
+      "base_price_usd": 219,
+      "recommended_min_rate_usd": 199,
+      "recommended_max_discount_pct": 10
+    }
+    },
+    {
+      "hotel_id": "HOT002",
+      "hotel_name": "Marriott Westside Chicago",
+      "city": "Chicago",
+      "metro_area": "Chicago",
+      "hotel_type": "Convention Hotel",
+      "total_rooms": 200,
+      "current_occupancy_pct": 71,
+      "occupied_rooms": 142,
+      "available_rooms": 58,
+      "forecast_period": "next weekend",
+      "primary_guest_segment": "Conference Attendees",
+      "nearby_events": ["National Sales Expo"],
+       "metadata": {
+      "source_type": "hotel",
+      "region": "Chicago",
+      "date_range": "2026-08-07 to 2026-08-10",
+      "base_price_usd": 249,
+      "recommended_min_rate_usd": 229,
+      "recommended_max_discount_pct": 8
+    }
+    },
+    {
+      "hotel_id": "HOT003",
+      "hotel_name": "Westin Copley Place",
+      "city": "Boston",
+      "metro_area": "Boston",
+      "hotel_type": "Luxury Hotel",
+      "total_rooms": 120,
+      "current_occupancy_pct": 55,
+      "occupied_rooms": 66,
+      "available_rooms": 54,
+      "forecast_period": "next weekend",
+      "primary_guest_segment": "Luxury Leisure Seekers",
+      "nearby_events": ["Healthcare Innovation Summit"],
+       "metadata": {
+      "source_type": "hotel",
+      "region": "Boston",
+      "date_range": "2026-06-17 to 2026-06-18",
+      "base_price_usd": 329,
+      "recommended_min_rate_usd": 309,
+      "recommended_max_discount_pct": 6
+    }
+    }
+  ]
+}

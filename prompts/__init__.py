@@ -3,4 +3,4 @@
 Stubs and example prompt files live in this package.
 """
 
-__all__ = ["campaign_prompt"]
+__all__ = ["campaigns_prompt"]

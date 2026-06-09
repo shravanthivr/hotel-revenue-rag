@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections import defaultdict
+from typing import Any
+
 import streamlit as st
 
 from ingestion.loader import env_value
@@ -16,6 +19,192 @@ DEMO_QUESTIONS = {
 }
 
 st.set_page_config(page_title="Hotel Revenue RAG", layout="wide")
+
+SOURCE_LABELS = {
+    "hotels": "Hotels",
+    "events": "Events",
+    "campaign_history": "Historical Campaign Evidence",
+    "playbook": "Pricing Rules and Playbooks",
+    "personas": "Guest Personas",
+}
+
+
+def value_or_dash(value: Any) -> Any:
+    return value if value not in (None, "") else "Not found in retrieved sources"
+
+
+def render_field_row(label: str, value: Any) -> None:
+    label_col, value_col = st.columns([1, 3])
+    label_col.markdown(f"**{label}**")
+    value_col.write(value_or_dash(value))
+
+
+def render_kpi_cards(result: dict[str, Any]) -> None:
+    retrieval = result.get("retrieval", {})
+    latency_col, score_col, merged_col = st.columns(3)
+    latency_col.metric("Latency", f"{result.get('latency', 0)}s")
+    score_col.metric("Best rerank score", retrieval.get("best_score", "n/a"))
+    merged_col.metric("Merged candidates", retrieval.get("n_merged", "n/a"))
+
+
+def first_source_by_collection(
+    sources: list[dict[str, Any]], collection: str
+) -> dict[str, Any] | None:
+    return next((source for source in sources if source.get("collection") == collection), None)
+
+
+def render_campaign_recommendation(brief: dict[str, Any], answer: str) -> None:
+    with st.container(border=True):
+        st.subheader("Campaign Recommendation")
+        if not brief:
+            st.write(answer)
+            return
+
+        render_field_row("Campaign Name", brief.get("campaign"))
+        render_field_row("Target Segment", brief.get("target_segment"))
+        render_field_row("Offer", brief.get("offer"))
+        render_field_row("Expected Occupancy Lift", brief.get("expected_lift"))
+        render_field_row(
+            "Pricing Guardrails",
+            (
+                f"Base price: {brief.get('base_price')}; "
+                f"minimum rate: {brief.get('minimum_rate')}; "
+                f"maximum discount: {brief.get('max_discount')}"
+            ),
+        )
+
+        st.divider()
+        st.markdown("**Recommendation Rationale**")
+        st.write(answer)
+
+
+def render_context_sections(brief: dict[str, Any], sources: list[dict[str, Any]]) -> None:
+    if not brief:
+        return
+
+    event_source = first_source_by_collection(sources, "events") or {}
+    event_raw = event_source.get("raw", {})
+    event_meta = event_raw.get("metadata", {}) if isinstance(event_raw, dict) else {}
+
+    hotel_col, event_col = st.columns(2)
+    with hotel_col:
+        with st.container(border=True):
+            st.subheader("Hotel Context")
+            render_field_row("Hotel", brief.get("hotel"))
+            render_field_row("Occupancy", brief.get("occupancy"))
+            render_field_row("Available Rooms", brief.get("available_rooms"))
+            render_field_row("Forecast Period", brief.get("date_range"))
+
+    with event_col:
+        with st.container(border=True):
+            st.subheader("Event Context")
+            render_field_row("Relevant Event", brief.get("event"))
+            render_field_row("Event Dates", event_meta.get("date_range"))
+            render_field_row("Attendance Estimate", event_raw.get("attendance_estimate"))
+            render_field_row(
+                "Distance From Hotel",
+                (
+                    f"{event_raw.get('distance_from_hotel_miles')} miles"
+                    if event_raw.get("distance_from_hotel_miles") is not None
+                    else None
+                ),
+            )
+            render_field_row("Expected Price Pressure", event_meta.get("expected_price_pressure"))
+
+    st.divider()
+
+    with st.container(border=True):
+        st.subheader("Pricing Rules")
+        price_col, min_col, discount_col = st.columns(3)
+        price_col.metric("Base price", brief.get("base_price", "n/a"))
+        min_col.metric("Minimum rate", brief.get("minimum_rate", "n/a"))
+        discount_col.metric("Max discount", brief.get("max_discount", "n/a"))
+        render_field_row("Guardrail summary", brief.get("playbook_action"))
+
+
+def render_historical_campaign_evidence(sources: list[dict[str, Any]]) -> None:
+    with st.container(border=True):
+        st.subheader("Historical Campaign Evidence")
+        campaign_sources = [
+            source for source in sources if source.get("collection") == "campaign_history"
+        ]
+        if not campaign_sources:
+            st.info("No historical campaign sources passed the confidence gate.")
+            return
+
+        for index, source in enumerate(campaign_sources, 1):
+            raw = source.get("raw", {})
+            metadata = raw.get("metadata", {}) if isinstance(raw, dict) else {}
+            with st.expander(
+                f"{raw.get('campaign_name', f'Campaign source {index}')} | "
+                f"rerank {source.get('rerank_score', 'n/a')}",
+                expanded=index == 1,
+            ):
+                render_field_row("Offer", raw.get("offer"))
+                render_field_row("Occupancy Lift", raw.get("occupancy_lift"))
+                render_field_row("Discount", metadata.get("discount_pct"))
+                st.divider()
+                st.write(source.get("text", ""))
+
+
+def source_type_for(source: dict[str, Any]) -> str:
+    raw = source.get("raw", {})
+    metadata = raw.get("metadata", {}) if isinstance(raw, dict) else {}
+    return metadata.get("source_type") or source.get("collection", "unknown")
+
+
+def render_sources(sources: list[dict[str, Any]]) -> None:
+    with st.container(border=True):
+        st.subheader("Retrieved Evidence by Source Type")
+        if not sources:
+            st.info("No sources passed the confidence gate.")
+            return
+
+        grouped_sources: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for source in sources:
+            grouped_sources[source_type_for(source)].append(source)
+
+        for source_type, group in grouped_sources.items():
+            label = SOURCE_LABELS.get(source_type, source_type.replace("_", " ").title())
+            with st.expander(f"{label} ({len(group)})", expanded=False):
+                for index, source in enumerate(group, 1):
+                    st.markdown(
+                        f"**Source {index}: {source.get('collection', 'unknown')} | "
+                        f"rerank {source.get('rerank_score', 'n/a')}**"
+                    )
+                    st.write(source.get("text", ""))
+                    st.json(source.get("raw", {}), expanded=False)
+                    if index < len(group):
+                        st.divider()
+
+
+def render_retrieval_diagnostics(result: dict[str, Any]) -> None:
+    retrieval = result.get("retrieval", {})
+    with st.expander("Retrieval Diagnostics", expanded=False):
+        comparison_rows = []
+        for label, key in [
+            ("Dense top result", "top_dense"),
+            ("BM25 top result", "top_sparse"),
+            ("RRF merged top result", "top_merged"),
+            ("Final reranked result", "top_reranked"),
+        ]:
+            item = retrieval.get(key)
+            if item:
+                comparison_rows.append(
+                    {
+                        "Stage": label,
+                        "Collection": item["collection"],
+                        "Dense": item["dense_score"],
+                        "BM25": item["sparse_score"],
+                        "RRF": item["rrf_score"],
+                        "Rerank": item["rerank_score"],
+                        "Preview": item["text_preview"],
+                    }
+                )
+        if comparison_rows:
+            st.dataframe(comparison_rows, use_container_width=True, hide_index=True)
+        st.json(retrieval)
+
 
 st.title("Hotel Revenue RAG")
 st.caption("Ask grounded questions across hotels, events, campaigns, personas, and playbooks.")
@@ -49,79 +238,17 @@ if st.button("Ask", type="primary", disabled=not question.strip()):
             st.error(str(exc))
             st.stop()
 
-    st.subheader("Answer")
-    st.write(result["answer"])
-
-    left, right, center = st.columns(3)
-    left.metric("Latency", f"{result['latency']}s")
-    right.metric("Best rerank score", result["retrieval"]["best_score"])
-    center.metric("Merged candidates", result["retrieval"]["n_merged"])
-
-    with st.expander("Retrieval details", expanded=False):
-        st.json(result["retrieval"])
-
     brief = result.get("campaign_brief")
-    if brief:
-        st.subheader("Campaign Brief")
-        top_left, top_mid, top_right = st.columns(3)
-        top_left.metric("Hotel", brief["hotel"])
-        top_mid.metric("Occupancy", brief["occupancy"])
-        top_right.metric("Available rooms", brief["available_rooms"])
+    sources = result.get("sources", [])
 
-        brief_left, brief_right = st.columns(2)
-        with brief_left:
-            st.write("**Recommended campaign**")
-            st.write(brief["campaign"])
-            st.write("**Offer**")
-            st.write(brief["offer"])
-            st.write("**Target segment**")
-            st.write(brief["target_segment"])
-        with brief_right:
-            st.write("**Relevant event**")
-            st.write(brief["event"])
-            st.write("**Date range**")
-            st.write(brief["date_range"])
-            st.write("**Expected lift**")
-            st.write(brief["expected_lift"])
-
-        price_left, price_mid, price_right = st.columns(3)
-        price_left.metric("Base price", brief["base_price"])
-        price_mid.metric("Minimum rate", brief["minimum_rate"])
-        price_right.metric("Max discount", brief["max_discount"])
-        st.write("**Playbook action**")
-        st.write(brief["playbook_action"])
-
-    st.subheader("Retrieval Comparison")
-    comparison_rows = []
-    for label, key in [
-        ("Dense top result", "top_dense"),
-        ("BM25 top result", "top_sparse"),
-        ("RRF merged top result", "top_merged"),
-        ("Final reranked result", "top_reranked"),
-    ]:
-        item = result["retrieval"].get(key)
-        if item:
-            comparison_rows.append(
-                {
-                    "Stage": label,
-                    "Collection": item["collection"],
-                    "Dense": item["dense_score"],
-                    "BM25": item["sparse_score"],
-                    "RRF": item["rrf_score"],
-                    "Rerank": item["rerank_score"],
-                    "Preview": item["text_preview"],
-                }
-            )
-    if comparison_rows:
-        st.dataframe(comparison_rows, use_container_width=True, hide_index=True)
-
-    st.subheader("Sources")
-    if not result["sources"]:
-        st.info("No sources passed the confidence gate.")
-    for index, source in enumerate(result["sources"], 1):
-        with st.expander(
-            f"Source {index}: {source['collection']} | rerank {source['rerank_score']}",
-            expanded=index == 1,
-        ):
-            st.write(source["text"])
-            st.json(source["raw"])
+    render_kpi_cards(result)
+    st.divider()
+    render_campaign_recommendation(brief, result.get("answer", ""))
+    st.divider()
+    render_context_sections(brief, sources)
+    st.divider()
+    render_historical_campaign_evidence(sources)
+    st.divider()
+    render_sources(sources)
+    st.divider()
+    render_retrieval_diagnostics(result)

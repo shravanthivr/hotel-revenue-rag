@@ -24,7 +24,6 @@ SOURCE_LABELS = {
     "hotels": "Hotels",
     "events": "Events",
     "campaign_history": "Historical Campaign Evidence",
-    "playbook": "Pricing Rules and Playbooks",
     "personas": "Guest Personas",
 }
 
@@ -119,7 +118,6 @@ def render_context_sections(brief: dict[str, Any], sources: list[dict[str, Any]]
         price_col.metric("Base price", brief.get("base_price", "n/a"))
         min_col.metric("Minimum rate", brief.get("minimum_rate", "n/a"))
         discount_col.metric("Max discount", brief.get("max_discount", "n/a"))
-        render_field_row("Guardrail summary", brief.get("playbook_action"))
 
 
 def render_historical_campaign_evidence(sources: list[dict[str, Any]]) -> None:
@@ -207,7 +205,7 @@ def render_retrieval_diagnostics(result: dict[str, Any]) -> None:
 
 
 st.title("Hotel Revenue RAG")
-st.caption("Ask grounded questions across hotels, events, campaigns, personas, and playbooks.")
+st.caption("Ask grounded questions across hotels, events, campaigns, and personas.")
 
 missing = [key for key in ("PINECONE_API_KEY", "NEBIUS_API_KEY") if not env_value(key)]
 if missing:
@@ -221,7 +219,6 @@ namespace_options = {
     "Campaigns": "campaigns",
     "Events": "events",
     "Personas": "personas",
-    "Playbook": "playbook",
 }
 selected_labels = st.multiselect(
     "Search scope",

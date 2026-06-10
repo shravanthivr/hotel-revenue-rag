@@ -93,14 +93,6 @@
     { "segment": "Eco-Conscious Travelers", "preferences": ["green certifications", "plant-based dining", "bike rentals"] }
   ],
 
-  "playbook": [
-    { "segment": "Conference Attendees", "insight": "Conference attendees respond well to bundle offers that include transportation and flexible checkout.", "recommended_actions": ["offer shuttle package", "extend checkout to 2PM", "include breakfast"] },
-    { "segment": "Business Travelers", "insight": "Business travelers prioritize speed and predictability over perks. Loyalty points and express check-in drive repeat bookings.", "recommended_actions": ["enroll in loyalty program", "guarantee room type", "offer express check-in"] },
-    { "segment": "Luxury Leisure Seekers", "insight": "Luxury guests expect proactive personalization. Pre-arrival outreach with curated itineraries significantly increases ancillary spend.", "recommended_actions": ["send pre-arrival itinerary", "offer spa pre-booking", "assign dedicated butler"] },
-    { "segment": "Family Vacationers", "insight": "Families book further in advance and respond to all-inclusive pricing. Transparent costs remove the biggest friction point.", "recommended_actions": ["offer all-inclusive tier", "highlight kids club hours", "provide dedicated family concierge"] },
-    { "segment": "Remote Workers", "insight": "Work-from-hotel guests stay longer when guaranteed workspace quality. A 'test the desk' photo package in emails converts at 3x the rate.", "recommended_actions": ["send workspace photo package", "offer weekly rate discount", "guarantee dedicated desk"] }
-  ],
-
   
  "hotels": [
     {

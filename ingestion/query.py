@@ -30,7 +30,7 @@ Pricing Guardrail:
 Supporting Evidence:
 
 Do not invent prices, discounts, event details, or occupancy lift. Cite the hotel,
-campaign, event, persona, or playbook segment used."""
+campaign, event, or persona segment used."""
 
 
 def get_nebius_client() -> OpenAI:
@@ -90,12 +90,10 @@ def build_campaign_brief(sources: list[dict[str, Any]]) -> dict[str, Any]:
     hotel = first_source_by_collection(sources, "hotels")
     event = first_source_by_collection(sources, "events")
     campaign = first_source_by_collection(sources, "campaign_history")
-    playbook = first_source_by_collection(sources, "playbook")
 
     hotel_raw = hotel["raw"] if hotel else {}
     event_raw = event["raw"] if event else {}
     campaign_raw = campaign["raw"] if campaign else {}
-    playbook_raw = playbook["raw"] if playbook else {}
     hotel_meta = hotel_raw.get("metadata", {})
     campaign_meta = campaign_raw.get("metadata", {})
 
@@ -139,8 +137,6 @@ def build_campaign_brief(sources: list[dict[str, Any]]) -> dict[str, Any]:
                 else "Not found in retrieved sources"
             )
         ),
-        "playbook_action": "; ".join(playbook_raw.get("recommended_actions", []))
-        or "Not found in retrieved sources",
     }
 
 

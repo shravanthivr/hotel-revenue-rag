@@ -44,7 +44,6 @@ NAMESPACES = {
     "campaign_history": "campaigns",
     "events": "events",
     "guest_personas": "personas",
-    "playbook": "playbook",
     "hotels": "hotels",
 }
 
@@ -103,14 +102,6 @@ def record_to_text(collection: str, record: dict[str, Any]) -> str:
     if collection == "guest_personas":
         prefs = ", ".join(record["preferences"])
         return f"Guest segment: {record['segment']}. Preferences: {prefs}.{metadata_text}"
-    if collection == "playbook":
-        actions = "; ".join(record["recommended_actions"])
-        return (
-            f"Segment: {record['segment']}. "
-            f"Insight: {record['insight']} "
-            f"Actions: {actions}."
-            f"{metadata_text}"
-        )
     if collection == "hotels":
         return (
             f"Hotel: {record['hotel_name']}. "

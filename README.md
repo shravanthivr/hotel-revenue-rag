@@ -5,7 +5,7 @@ Demo: Graph RAG for Organizational Knowledge - Langchain/Graph
 
 ## Overview
 
-This project demonstrates a Retrieval-Augmented Generation (RAG) application for hotel revenue optimization. The system analyzes hotel occupancy forecasts, local events, guest personas, historical campaign performance, and marketing playbooks to recommend targeted promotional campaigns that can help increase hotel occupancy.
+This project demonstrates a Retrieval-Augmented Generation (RAG) application for hotel revenue optimization. The system analyzes hotel occupancy forecasts, local events, guest personas, and historical campaign performance to recommend targeted promotional campaigns that can help increase hotel occupancy.
 
 The application uses Pinecone Vector Database, a local dimension-matched embedding model, hybrid retrieval, reranking, and Nebius Token Factory for grounded answer generation.
 
@@ -90,10 +90,6 @@ Conferences, concerts, festivals, and sporting events.
 ### Guest Personas
 
 Traveler segments, preferences, and booking behaviors.
-
-### Marketing Playbooks
-
-Best practices and campaign strategies.
 
 ### Occupancy Forecasts
 
@@ -219,8 +215,7 @@ Expected Occupancy Lift:
 10-15%
 
 Supporting Evidence:
-Retrieved from conference marketing playbooks,
-historical campaign data, and business traveler personas.
+Retrieved from event data, historical campaign data, and business traveler personas.
 ```
 ---
 

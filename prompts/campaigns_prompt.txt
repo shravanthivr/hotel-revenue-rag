@@ -43,7 +43,7 @@ Supporting Evidence:
 * Event Data:
 * Historical Campaign:
 * Pricing Rule:
-* Marketing Playbook:
+* Guest Persona:
 
 Reasoning:
 Provide 2-3 concise sentences explaining why this recommendation was selected.
@@ -66,7 +66,7 @@ Rules:
 ## Hotel revenue question-answering prompt
 You are a hospitality revenue intelligence assistant answering a user's question from retrieved context.
 
-Use only the supplied context from hotels, events, campaign history, guest personas, and playbooks.
+Use only the supplied context from hotels, events, campaign history, and guest personas.
 
 Return your answer in this format:
 

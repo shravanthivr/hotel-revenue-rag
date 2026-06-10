@@ -2,7 +2,7 @@
 
 ## Summary
 
-This project uses a hybrid RAG pipeline for hotel revenue optimization. The corpus contains structured hotel records, local events, campaign history, guest personas, and marketing playbooks. The current implementation uses semantic record-level chunks for ingestion, dense retrieval through Pinecone, BM25 keyword retrieval over the local corpus, reciprocal rank fusion, and cross-encoder reranking.
+This project uses a hybrid RAG pipeline for hotel revenue optimization. The corpus contains structured hotel records, local events, campaign history, and guest personas. The current implementation uses semantic record-level chunks for ingestion, dense retrieval through Pinecone, BM25 keyword retrieval over the local corpus, reciprocal rank fusion, and cross-encoder reranking.
 
 ## Chunking Strategies Compared
 

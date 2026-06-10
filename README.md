@@ -1,3 +1,5 @@
+
+
 # hotel-revenue-rag
 Demo: Graph RAG for Organizational Knowledge - Langchain/Graph
 
@@ -27,6 +29,7 @@ This project uses RAG to retrieve relevant business knowledge and generate evide
 
 ---
 
+
 ## Learning Objectives
 
 This project demonstrates:
@@ -44,6 +47,8 @@ This project demonstrates:
 ---
 
 ## Architecture
+
+<img width="1024" height="1024" alt="Story Arc-HOtel RAG" src="https://github.com/user-attachments/assets/108529bc-075a-4391-86d0-0d44c2d63803" />
 
 ```text
 Synthetic Business Data
@@ -115,6 +120,8 @@ Projected occupancy levels used as input for recommendations.
 * Git
 
 ---
+<img width="3420" height="1776" alt="HotelPage1-RAG" src="https://github.com/user-attachments/assets/ba13b6b8-e5f9-467f-b690-7022215292fd" />
+<img width="3420" height="1776" alt="HotelPage2-RAG" src="https://github.com/user-attachments/assets/3154da5c-7abd-4e72-a90c-5fb3fa78ed59" />
 
 ## Retrieval Workflow
 

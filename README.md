@@ -156,16 +156,16 @@ hotel-revenue-rag/
 │
 ├── ingestion/
 │   ├── loader.py
+│   ├── prompting.py
+│   ├── results.py
 │   └── query.py
 │
 ├── retrievers/
 │   └── retriever.py
 │
-├── chains/
-│   └── rag_chain.py
-│
 ├── prompts/
-│   └── campaigns_prompt.txt
+│   ├── backend_system_prompt.txt
+│   └── backend_user_prompt.txt
 ├── reports/
 │   └── chunking_retrieval_report.md
 ├── app.py
